@@ -5,6 +5,12 @@ class Player {
   get sprite() {
     return this._sprite;
   }
+  get x() {
+    return this.sprite.x;
+  }
+  get y() {
+    return this.sprite.y;
+  }
   constructor(opts = {}) {
     const {
       scene,
@@ -18,7 +24,9 @@ class Player {
       throw new Error('Missing scene');
     }
     this._sprite = scene.physics.add.sprite(x, y, 'player');
+    this._sprite.body.setSize(4, 7, this._sprite.getCenter());
     this._crosshair = scene.add.sprite(x, y, 'hud', 0);
+    this._gfx = scene.add.graphics();
     this._initControls();
   }
   _initControls() {
@@ -43,9 +51,21 @@ class Player {
   update() {
     this._handleKeyPresses();
   }
-  _moveCrosshair(dX, dY) {
-    console.log('Moving cursor: ', dX.position);
-    this._crosshair.setPosition(dX.position.x, dX.position.y);
+  _moveCrosshair(pointer) {
+    const {
+      x: pointX,
+      y: pointY,
+    } = pointer.position;
+    this._crosshair.setPosition(pointX, pointY);
+    this._gfx.clear();
+    this._gfx.lineStyle(1, 0x2ECC4011, 0.12);
+
+    this._gfx.beginPath();
+    this._gfx.moveTo(this.x, this.y);
+    this._gfx.lineTo(pointX, pointY);
+    this._gfx.closePath();
+    this._gfx.strokePath();
+
   }
   _handleKeyPresses() {
     // Handle movement
