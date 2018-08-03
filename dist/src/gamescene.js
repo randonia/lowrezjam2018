@@ -42,6 +42,7 @@ class GameScene extends BaseScene {
       });
     }
 
+    // Create the player and all game objects
     player = new Player({
       x: 8,
       y: 8,
@@ -51,6 +52,10 @@ class GameScene extends BaseScene {
     this.addObject(player);
     this.physics.add.collider(player.sprite, groundLayer);
 
+    // Set up the camera
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    const CAMERA_LERP = 0.18;
+    this.cameras.main.startFollow(player.sprite, true, CAMERA_LERP, CAMERA_LERP);
   }
   update(time, delta) {
     super.update(time, delta);

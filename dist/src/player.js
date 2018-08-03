@@ -26,6 +26,10 @@ class Player {
     this._sprite = scene.physics.add.sprite(x, y, 'player');
     this._sprite.body.setSize(4, 7, this._sprite.getCenter());
     this._crosshair = scene.add.sprite(x, y, 'hud', 0);
+    this._crosshairPos = {
+      x: 0,
+      y: 0
+    };
     this._gfx = scene.add.graphics();
     this._initControls();
   }
@@ -50,12 +54,12 @@ class Player {
   }
   update() {
     this._handleKeyPresses();
-  }
-  _moveCrosshair(pointer) {
+
+    // Move the crosshair and laser
     const {
       x: pointX,
-      y: pointY,
-    } = pointer.position;
+      y: pointY
+    } = this.scene.cameras.main.getWorldPoint(this._crosshairPos.x, this._crosshairPos.y);
     this._crosshair.setPosition(pointX, pointY);
     this._gfx.clear();
     this._gfx.lineStyle(1, 0x2ECC4011, 0.12);
@@ -65,7 +69,10 @@ class Player {
     this._gfx.lineTo(pointX, pointY);
     this._gfx.closePath();
     this._gfx.strokePath();
-
+  }
+  _moveCrosshair(pointer) {
+    this._crosshairPos.x = pointer.x;
+    this._crosshairPos.y = pointer.y;
   }
   _handleKeyPresses() {
     // Handle movement
