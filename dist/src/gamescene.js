@@ -1,6 +1,9 @@
 var player;
-var _map;
+
 class GameScene extends BaseScene {
+  constructor(config) {
+    super(config);
+  }
   preload() {
     console.info('Creating GameScene');
     this.load.spritesheet('player',
@@ -17,15 +20,35 @@ class GameScene extends BaseScene {
       key: 'map',
     });
 
-    _map = map;
     const tileset = map.addTilesetImage('ground', 'terrain');
     const groundLayer = map.createStaticLayer('snow_floor', tileset, 0, 0);
 
+    // This doesn't work for some reason so go manual. Cool.
+    // groundLayer.setCollisionByProperty({
+    //   collides: true
+    // });
+    groundLayer.setCollision(5);
+
+    if (PARAMS.debugphysics) {
+      const debugGraphics = this.add.graphics().setAlpha(0.75);
+      groundLayer.renderDebug(debugGraphics, {
+        tileColor: null, // Color of non-colliding tiles
+        collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+        faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+      });
+    }
+
     player = new Player({
-      x: 0,
-      y: 0,
+      x: 8,
+      y: 8,
       scene: this
     });
+
+    this.addObject(player);
+    this.physics.add.collider(player.sprite, groundLayer);
+
   }
-  update(time, delta) {}
+  update(time, delta) {
+    super.update(time, delta);
+  }
 }
