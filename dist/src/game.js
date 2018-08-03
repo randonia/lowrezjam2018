@@ -21,7 +21,7 @@ var gameConfig = {
         y: 0,
         x: 0,
       },
-      debug: DEBUG,
+      debug: PARAMS.debugphysics,
     }
   },
 }

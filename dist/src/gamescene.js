@@ -12,6 +12,10 @@ class GameScene extends BaseScene {
         frameHeight: 8
       }
     );
+    this.load.spritesheet('hud', 'assets/sprites/hud.png', {
+      frameWidth: 8,
+      frameHeight: 8,
+    });
     this.load.image('terrain', 'assets/tilesets/terrain.png');
     this.load.tilemapTiledJSON('map', 'assets/tilemaps/world-1-1.json');
   }
