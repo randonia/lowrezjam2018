@@ -2,6 +2,7 @@
   "folders": [{
     "name": "LOWREZJAM 2018",
     "path": ".",
-    "folder_exclude_patterns": ["dist/lib"]
+    "folder_exclude_patterns": ["dist/lib"],
+    "file_exclude_patterns": ["*.pyxel"]
   }]
 }

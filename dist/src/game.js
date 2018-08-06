@@ -7,7 +7,7 @@ if (/localhost/.test(window.location.href)) {
 const ZOOM = PARAMS.zoom || 4;
 
 var gameConfig = {
-  type: Phaser.AUTO,
+  type: Phaser.WEBGL,
   width: 64,
   height: 64,
   scene: new GameScene(),
@@ -27,3 +27,6 @@ var gameConfig = {
 }
 
 var game = new Phaser.Game(gameConfig);
+
+// Debugging yo
+const _scene = gameConfig.scene;

@@ -1,7 +1,7 @@
 const DEBUG = window.location.search.includes('debug=true');
 
+const DEBUG_TEXT = document.createElement('code');
 if (DEBUG) {
-  const DEBUG_TEXT = document.createElement('code');
   console.info('ＨＵＭＡＮ ＭＵＳＩＣ');
   console.info('...Ｉ ＬＩＫＥ ＩＴ');
   const DEBUG_INFO = document.createElement('p');
@@ -28,4 +28,8 @@ function dbgLog(msg, ...args) {
   if (DEBUG) {
     DEBUG_TEXT.innerText += `\n${sprintf(msg, ...args)}`;
   }
+}
+
+function rndName() {
+  return Math.random().toString().substr(2, 8);
 }

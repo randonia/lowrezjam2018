@@ -1,30 +1,19 @@
 const PLAYER_SPEED = 15;
 const PLAYER_MAX_SPEED_SCALAR = PLAYER_SPEED / Math.sqrt(Math.pow(PLAYER_SPEED, 2) + Math.pow(PLAYER_SPEED, 2));
 
-class Player {
-  get sprite() {
-    return this._sprite;
-  }
-  get x() {
-    return this.sprite.x;
-  }
-  get y() {
-    return this.sprite.y;
-  }
+class Player extends ZObject {
   constructor(opts = {}) {
+    super(opts);
+    this._name = 'player';
     const {
       scene,
       x = 0,
       y = 0,
     } = opts;
-    // Grant this access to the scene
-    this.scene = scene;
 
-    if (!this.scene) {
-      throw new Error('Missing scene');
-    }
-    this._sprite = scene.physics.add.sprite(x, y, 'player');
-    this._sprite.body.setSize(4, 7, this._sprite.getCenter());
+    this._sprite = this.createPhysicsSprite(x, y, 'player', PHYS_GROUPS.PLAYER, 4, 7);
+    this._collisionFlags = PHYS_LAYERS.PLAYER;
+    this._collidesWith = PHYS_LAYERS.NONE;
     this._crosshair = scene.add.sprite(x, y, 'hud', 0);
     this._crosshairPos = {
       x: 0,
@@ -83,6 +72,20 @@ class Player {
     dY += (this.keys.UP.isDown) ? -PLAYER_SPEED : 0;
     dY += (this.keys.DOWN.isDown) ? PLAYER_SPEED : 0;
 
+    // Check for blocked - super janky fix for this strange engine
+    const {
+      none,
+      up,
+      down,
+      left,
+      right
+    } = this.sprite.body.blocked;
+    if (left || right) {
+      dX = 0;
+    }
+    if (up || down) {
+      dY = 0;
+    }
     // Ensure a player max speed
     if ((Math.abs(dX) + Math.abs(dY)) > PLAYER_SPEED) {
       dX *= PLAYER_MAX_SPEED_SCALAR;
