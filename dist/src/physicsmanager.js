@@ -59,7 +59,6 @@ class _PhysicsManager {
     const sourceController = source._controller;
     const targetController = target._controller;
     if (!sourceController || !targetController) {
-      console.log('HELLO');
       return false;
     }
 
