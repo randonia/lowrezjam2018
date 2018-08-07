@@ -16,10 +16,12 @@ class Player extends ZObject {
     this._collidesWith = PHYS_LAYERS.NONE;
     this._crosshair = scene.add.sprite(x, y, 'hud', 0);
     this._crosshairPos = {
-      x: 0,
-      y: 0
+      x,
+      y,
     };
     this._gfx = scene.add.graphics();
+
+    const perceptionComponent = this.addComponent(COMPONENT_TYPES.Perception);
     this._initControls();
   }
   _initControls() {
@@ -42,6 +44,7 @@ class Player extends ZObject {
     }, this);
   }
   update() {
+    super.update();
     this._handleKeyPresses();
 
     // Move the crosshair and laser

@@ -30,10 +30,21 @@ class ZObject {
     } = opts;
     // Grant this access to the scene
     this.scene = scene;
-
     if (!this.scene) {
       throw new Error('Missing scene');
     }
+    this.components = [];
+  }
+  addComponent(componentType) {
+    const component = new(BaseComponent.getComponentClass(componentType))({
+      controller: this,
+      scene: this.scene,
+    });
+    this.components.push(component);
+    return component;
+  }
+  update() {
+    this.components.forEach(component => component.update(this));
   }
   /*
    * Creates a physics sprite and also registers it and sets the dimensions of the collision.

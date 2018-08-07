@@ -6,6 +6,7 @@ class GameScene extends BaseScene {
   }
   preload() {
     console.info('Creating GameScene');
+    this.load.image('circle', 'assets/sprites/circle.png');
     this.load.spritesheet('player',
       'assets/sprites/player.png', {
         frameWidth: 8,
