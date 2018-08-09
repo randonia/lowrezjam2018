@@ -54,9 +54,6 @@ class _PhysicsManager {
     this._scene.physics
   }
   onOverlap(source, target) {
-    if (PARAMS.DEBUG_COLLISIONS) {
-      console.log(sprintf('%s collided with %s', source._controller.name, target._controller.name));
-    }
     let src;
     let tgt;
     if (source._component) {
@@ -72,6 +69,9 @@ class _PhysicsManager {
       tgt = target._controller;
     } else {
       tgt = target;
+    }
+    if (PARAMS.debugcollisions) {
+      console.log(sprintf('%s collided with %s', src.name, tgt.name));
     }
     src.onCollide(tgt);
     tgt.onCollide(src);

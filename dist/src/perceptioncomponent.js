@@ -34,7 +34,7 @@ class PerceptionComponent extends BaseComponent {
     this._perceived = [];
 
     PhysicsManager.register(circle, PHYS_GROUPS.PERCEPTION, true)
-    if (DEBUG) {
+    if (PARAMS.debugperception) {
       this._debugGfx = scene.add.graphics();
     }
   }
@@ -58,7 +58,7 @@ class PerceptionComponent extends BaseComponent {
         cleanupIdx++;
       }
     }
-    if (DEBUG) {
+    if (PARAMS.debugperception) {
       this._debugGfx.clear();
 
       this._perceived.forEach(({

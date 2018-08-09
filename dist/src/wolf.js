@@ -45,4 +45,13 @@ class Wolf extends ZObject {
     } = payload;
     console.log('%s lost vision of %s', this.name, target.name);
   }
+  onCollide(other) {
+    if (other.name === 'player') {
+      // CHOMP!
+      if (DEBUG) {
+        console.log('Fox chomping player');
+      }
+      other.takeChomp(this);
+    }
+  }
 }

@@ -65,9 +65,6 @@ class ZObject {
   }
   onCollide(source, other) {}
   collidesWith(other) {
-    if (PARAMS.DEBUG_COLLISIONS) {
-      console.info(sprintf('Testing %s=%s should collide with %s=%s', this.name, this.collisionFlags, other.name, other.collisionFlags));
-    }
     return this.collisionFlags !== undefined && other.collisionFlags !== undefined &&
       this.collisionFlags & other.collisionFlags !== 0;
   }

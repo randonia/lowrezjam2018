@@ -61,6 +61,20 @@ class Player extends ZObject {
     this._gfx.closePath();
     this._gfx.strokePath();
   }
+  takeChomp(source) {
+    // Flash backwards
+    const chompDir = this.sprite.getCenter();
+    chompDir.subtract(source.sprite.getCenter()).normalize();
+    chompDir.scale(5);
+    const {
+      x,
+      y
+    } = this.sprite.getCenter();
+    if (DEBUG) {
+      console.log('playerPos=%s, wolfPos=%s, Chompdir=%s', this.sprite.getCenter().toString(), source.sprite.getCenter().toString(), chompDir.toString());
+    }
+    this.sprite.setPosition(x + chompDir.x, y + chompDir.y);
+  }
   _moveCrosshair(pointer) {
     this._crosshairPos.x = pointer.x;
     this._crosshairPos.y = pointer.y;

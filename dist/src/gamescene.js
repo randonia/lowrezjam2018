@@ -1,4 +1,5 @@
 var player;
+var wolf;
 var debugGraphics;
 
 class GameScene extends BaseScene {
@@ -58,7 +59,7 @@ class GameScene extends BaseScene {
       scene: this,
     });
     // create a new wolf
-    const wolf = new Wolf({
+    wolf = new Wolf({
       x: 16,
       y: 16,
       scene: this,
