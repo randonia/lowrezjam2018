@@ -21,7 +21,6 @@ class Player extends ZObject {
     };
     this._gfx = scene.add.graphics();
 
-    const perceptionComponent = this.addComponent(COMPONENT_TYPES.Perception);
     this._initControls();
   }
   _initControls() {

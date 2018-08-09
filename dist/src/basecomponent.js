@@ -2,11 +2,12 @@ const COMPONENT_TYPES = {
   Perception: 'perception',
 };
 
-class BaseComponent {
-  get controller() {
-    return this._controller;
+class BaseComponent extends Phaser.Events.EventEmitter {
+  set controller(value) {
+    this._controller = value;
   }
   constructor(opts) {
+    super(opts);
     const {
       controller,
       scene,
@@ -29,7 +30,7 @@ class BaseComponent {
   static getComponentClass(type) {
     switch (type) {
       case COMPONENT_TYPES.Perception:
-        return PerceptionCompoent;
+        return PerceptionComponent;
       default:
         throw new Error('InvalidComponent');
     }

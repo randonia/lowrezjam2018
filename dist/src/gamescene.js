@@ -1,4 +1,5 @@
 var player;
+var debugGraphics;
 
 class GameScene extends BaseScene {
   constructor(config) {
@@ -42,7 +43,7 @@ class GameScene extends BaseScene {
     groundLayer.setCollision(5);
 
     if (PARAMS.debugphysics) {
-      const debugGraphics = this.add.graphics().setAlpha(0.75);
+      debugGraphics = this.add.graphics().setAlpha(0.75);
       groundLayer.renderDebug(debugGraphics, {
         tileColor: null, // Color of non-colliding tiles
         collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles

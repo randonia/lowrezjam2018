@@ -27,8 +27,22 @@ class Wolf extends ZObject {
       repeat: -1,
     });
 
+    const perceptionComponent = this.addComponent(COMPONENT_TYPES.Perception);
+    perceptionComponent.on(EVENT_PERCEPTION_NEW, (payload) => this.onObserve(payload));
+    perceptionComponent.on(EVENT_PERCEPTION_LOST, (payload) => this.onLostVision(payload));
     this._sprite.play('idle');
     this._state = WOLF_STATE.IDLE;
   }
-  update() {}
+  onObserve(payload) {
+    const {
+      target,
+    } = payload;
+    console.log('%s gained vision of %s ', this.name, target.name);
+  }
+  onLostVision(payload) {
+    const {
+      target
+    } = payload;
+    console.log('%s lost vision of %s', this.name, target.name);
+  }
 }

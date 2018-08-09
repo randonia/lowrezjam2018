@@ -50,15 +50,37 @@ class _PhysicsManager {
   deRegister(object, groupId) {
 
   }
+  blockCollide(left, right) {
+    this._scene.physics
+  }
   onOverlap(source, target) {
-    if (DEBUG) {
+    if (PARAMS.DEBUG_COLLISIONS) {
       console.log(sprintf('%s collided with %s', source._controller.name, target._controller.name));
     }
+    let src;
+    let tgt;
+    if (source._component) {
+      src = source._component;
+    } else if (source._controller) {
+      src = source._controller;
+    } else {
+      src = source;
+    }
+    if (target._component) {
+      tgt = target._component;
+    } else if (target._controller) {
+      tgt = target._controller;
+    } else {
+      tgt = target;
+    }
+    src.onCollide(tgt);
+    tgt.onCollide(src);
   }
   shouldOverlap(source, target) {
     const sourceController = source._controller;
     const targetController = target._controller;
-    if (!sourceController || !targetController) {
+    if ((!sourceController || !targetController) ||
+      (sourceController === targetController)) {
       return false;
     }
 

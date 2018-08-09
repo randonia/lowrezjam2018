@@ -40,6 +40,7 @@ class ZObject {
       controller: this,
       scene: this.scene,
     });
+    component.controller = this;
     this.components.push(component);
     return component;
   }
@@ -62,11 +63,9 @@ class ZObject {
     result._controller = this;
     return
   }
-  onCollide(other) {
-    console.log('ZObject colliding with:', other);
-  }
+  onCollide(source, other) {}
   collidesWith(other) {
-    if (DEBUG) {
+    if (PARAMS.DEBUG_COLLISIONS) {
       console.info(sprintf('Testing %s=%s should collide with %s=%s', this.name, this.collisionFlags, other.name, other.collisionFlags));
     }
     return this.collisionFlags !== undefined && other.collisionFlags !== undefined &&
