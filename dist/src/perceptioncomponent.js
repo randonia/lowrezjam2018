@@ -74,8 +74,9 @@ class PerceptionComponent extends BaseComponent {
     }
   }
   resizeCircle() {
-    const offsetX = -this._radius + this._controller.sprite.width * 0.5;
-    const offsetY = -this._radius + this._controller.sprite.height * 0.5;
+    // lol +1 hack
+    const offsetX = -this._radius + this._controller.sprite.width * 0.5 + 1;
+    const offsetY = -this._radius + this._controller.sprite.height * 0.5 + 1;
     this._circle.body.setCircle(this._radius, offsetX, offsetY);
   }
   onCollide(target) {

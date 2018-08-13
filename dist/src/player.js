@@ -2,6 +2,9 @@ const PLAYER_SPEED = 15;
 const PLAYER_MAX_SPEED_SCALAR = PLAYER_SPEED / Math.sqrt(Math.pow(PLAYER_SPEED, 2) + Math.pow(PLAYER_SPEED, 2));
 
 class Player extends ZObject {
+  get temperature() {
+    return this._temperature;
+  }
   constructor(opts = {}) {
     super(opts);
     this._name = 'player';
@@ -10,8 +13,9 @@ class Player extends ZObject {
       x = 0,
       y = 0,
     } = opts;
-
-    this._sprite = this.createPhysicsSprite(x, y, 'player', PHYS_GROUPS.PLAYER, 4, 7);
+    // Add Bad collision support
+    PhysicsManager.registerBadCollision(this);
+    this._sprite = this.createPhysicsSprite(x, y, 'player', PHYS_GROUPS.PLAYER, 3, 7);
     this._collisionFlags = PHYS_LAYERS.PLAYER;
     this._collidesWith = PHYS_LAYERS.NONE;
     this._crosshair = scene.add.sprite(x, y, 'hud', 0);
@@ -21,7 +25,7 @@ class Player extends ZObject {
     };
     this._gfx = scene.add.graphics();
     this._hitpoints = 3;
-
+    this._temperature = 1;
     this._initControls();
   }
   _initControls() {
@@ -50,6 +54,7 @@ class Player extends ZObject {
       this._sprite.body.enable = false;
       return;
     }
+    this.warmthCheck();
     this._handleKeyPresses();
 
     // Move the crosshair and laser
@@ -69,6 +74,9 @@ class Player extends ZObject {
   }
   deadCheck() {
     return this._hitpoints <= 0;
+  }
+  warmthCheck() {
+
   }
   takeChomp(source) {
     // Flash backwards

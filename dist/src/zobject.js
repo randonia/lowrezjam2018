@@ -55,21 +55,24 @@ class ZObject extends Phaser.Events.EventEmitter {
    * Creates a physics sprite and also registers it and sets the dimensions of the collision.
    * Mostly a shorthand. Use PhysicsManager group IDs to select.
    */
-  createPhysicsSprite(x, y, spriteId, groupId, collideW, collideH) {
+  createPhysicsSprite(x, y, spriteId, groupId, collideW, collideH, useCollision = false) {
     const newSprite = this.scene.physics.add.sprite(x, y, spriteId);
     newSprite.body.setSize(collideW || newSprite.width, collideH || newSprite.height, newSprite.getCenter());
-    PhysicsManager.register(newSprite, groupId);
+    PhysicsManager.register(newSprite, groupId, false, useCollision);
     newSprite._controller = this;
     return newSprite;
   }
-  createSprite(x, y, spriteId, frameNum = 0) {
+  createSprite(x, y, spriteId, frameNum = 0, fixedPos = false) {
     const result = this.scene.add.sprite(x, y, spriteId, frameNum);
     result._controller = this;
+    if (fixedPos) {
+      result.setScrollFactor(0, 0);
+    }
     return result;
   }
   onCollide(source, other) {}
   collidesWith(other) {
     return this.collisionFlags !== undefined && other.collisionFlags !== undefined &&
-      this.collisionFlags & other.collisionFlags !== 0;
+      (this.collisionFlags & other.collisionFlags) !== 0;
   }
 }

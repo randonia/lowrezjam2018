@@ -3,6 +3,7 @@ const PHYS_LAYERS = {
   PLAYER: 1,
   ENEMY: 2,
   PERCEPTION: 4,
+  INTERACTIONS: 8,
 }
 
 const PHYS_GROUPS = {
@@ -10,6 +11,7 @@ const PHYS_GROUPS = {
   PLAYER: 1001,
   ENEMY: 1002,
   PERCEPTION: 1003,
+  INTERACTIONS: 1004,
 };
 
 /**
@@ -19,6 +21,7 @@ class _PhysicsManager {
   constructor() {
     this._groups = {};
     this._terrain = [];
+    this._badColliders = [];
   }
   // Tell this PM to manage the scene
   manageScene(scene) {
@@ -27,17 +30,36 @@ class _PhysicsManager {
     }
     this._scene = scene;
     scene.physics.world.on('COLLIDE_EVENT', (event) => console.log('Collision event:', event));
+    scene.events.addListener('preupdate', (gameTime, deltaTime) => this.onPreUpdate(gameTime, deltaTime), this);
   }
-  register(object, groupId, ignoreTerrain = false) {
+  onPreUpdate(gameTime, deltaTime) {
+    const shtCol = {};
+    // test bad collision
+    for (var shtLft = 0; shtLft < this._badColliders.length; shtLft++) {
+      const leftCollider = this._badColliders[shtLft];
+      for (var shtRgt = 0; shtRgt < this._badColliders.length; shtRgt++) {
+        const rightCollider = this._badColliders[shtRgt];
+        if (leftCollider === rightCollider) continue;
+
+        if (leftCollider.collidesWith(rightCollider)) {
+          leftCollider.onCollide(rightCollider);
+        }
+      }
+    }
+  }
+  register(object, groupId, ignoreTerrain = false, useCollision = false) {
     if (groupId === PHYS_GROUPS.TERRAIN) {
       this._terrain.push(object);
       return;
     }
     if (!this._groups[groupId]) {
-      // this._groups[groupId] = new Phaser.Physics.Arcade.Group();
       const newGroup = this._scene.physics.add.group();
 
-      Object.keys(this._groups).forEach(groupId => this._scene.physics.add.overlap(newGroup, this._groups[groupId], this.onOverlap, this.shouldOverlap, this));
+      if (useCollision) {
+        Object.keys(this._groups).forEach(groupId => this._scene.physics.add.collider(newGroup, this._groups[groupId], this.onCollide, this.shouldCollide, this));
+      } else {
+        Object.keys(this._groups).forEach(groupId => this._scene.physics.add.overlap(newGroup, this._groups[groupId], this.onOverlap, this.shouldOverlap, this));
+      }
 
       this._groups[groupId] = newGroup;
       // make this group collide with terrain
@@ -49,6 +71,10 @@ class _PhysicsManager {
   }
   deRegister(object, groupId) {
 
+  }
+  // Because I'm too lazy to deal with Physics for heating
+  registerBadCollision(element) {
+    this._badColliders.push(element);
   }
   blockCollide(left, right) {
     this._scene.physics

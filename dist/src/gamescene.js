@@ -1,5 +1,6 @@
 var player;
 var wolf;
+var fire;
 var debugGraphics;
 var hud;
 
@@ -26,6 +27,11 @@ class GameScene extends BaseScene {
       frameWidth: 8,
       frameHeight: 8,
     });
+    this.load.spritesheet('heating', 'assets/sprites/heating.png', {
+      frameWidth: 8,
+      frameHeight: 8,
+    });
+
     this.load.image('terrain', 'assets/tilesets/terrain.png');
     this.load.tilemapTiledJSON('map', 'assets/tilemaps/world-1-1.json');
   }
@@ -61,13 +67,19 @@ class GameScene extends BaseScene {
     });
     // create a new wolf
     wolf = new Wolf({
+      x: 32,
+      y: 32,
+      scene: this,
+    });
+
+    fire = new Fire({
       x: 16,
       y: 16,
       scene: this,
     });
 
     this.addObject(player);
-
+    this.addObject(fire);
     this.addObject(wolf);
     // Set up the camera
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
