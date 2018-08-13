@@ -3,7 +3,7 @@
  * of helpers - is what this guy is. It has types and layers for identifying enemies because that
  * is just fancy
  */
-class ZObject {
+class ZObject extends Phaser.Events.EventEmitter {
   get collisionFlags() {
     return this._collisionFlags;
   }
@@ -22,7 +22,11 @@ class ZObject {
   get y() {
     return this.sprite.y;
   }
+  get hitpoints() {
+    return this._hitpoints;
+  }
   constructor(opts = {}) {
+    super(opts);
     const {
       scene,
       x = 0,
@@ -58,10 +62,10 @@ class ZObject {
     newSprite._controller = this;
     return newSprite;
   }
-  createSprite(x, y, spriteId) {
-    const result = this.scene.add.sprite(x, y, spriteId);
+  createSprite(x, y, spriteId, frameNum = 0) {
+    const result = this.scene.add.sprite(x, y, spriteId, frameNum);
     result._controller = this;
-    return
+    return result;
   }
   onCollide(source, other) {}
   collidesWith(other) {

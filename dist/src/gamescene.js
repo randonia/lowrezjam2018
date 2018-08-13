@@ -1,6 +1,7 @@
 var player;
 var wolf;
 var debugGraphics;
+var hud;
 
 class GameScene extends BaseScene {
   constructor(config) {
@@ -54,8 +55,8 @@ class GameScene extends BaseScene {
 
     // Create the player and all game objects
     player = new Player({
-      x: 22,
-      y: 8,
+      x: 21,
+      y: 24,
       scene: this,
     });
     // create a new wolf
@@ -72,6 +73,11 @@ class GameScene extends BaseScene {
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     const CAMERA_LERP = 0.18;
     this.cameras.main.startFollow(player.sprite, true, CAMERA_LERP, CAMERA_LERP);
+
+    hud = new HUD({
+      scene: this,
+    });
+    hud.bindToPlayer(player);
   }
   update(time, delta) {
     if (DEBUG) {

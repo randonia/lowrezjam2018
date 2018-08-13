@@ -20,6 +20,7 @@ class Player extends ZObject {
       y,
     };
     this._gfx = scene.add.graphics();
+    this._hitpoints = 3;
 
     this._initControls();
   }
@@ -44,6 +45,11 @@ class Player extends ZObject {
   }
   update() {
     super.update();
+    if (this.deadCheck()) {
+      console.log('Player is dead, killing body');
+      this._sprite.body.enable = false;
+      return;
+    }
     this._handleKeyPresses();
 
     // Move the crosshair and laser
@@ -61,6 +67,9 @@ class Player extends ZObject {
     this._gfx.closePath();
     this._gfx.strokePath();
   }
+  deadCheck() {
+    return this._hitpoints <= 0;
+  }
   takeChomp(source) {
     // Flash backwards
     const chompDir = this.sprite.getCenter();
@@ -74,6 +83,17 @@ class Player extends ZObject {
       console.log('playerPos=%s, wolfPos=%s, Chompdir=%s', this.sprite.getCenter().toString(), source.sprite.getCenter().toString(), chompDir.toString());
     }
     this.sprite.setPosition(x + chompDir.x, y + chompDir.y);
+
+    // take damage
+    const lastHitpoints = this.hitpoints;
+    this._hitpoints -= 0.5;
+
+    this.emit('hp', {
+      hitpoints: this.hitpoints,
+      lastHitpoints,
+    });
+
+    this.scene.cameras.main.flash(100, 255, 0, 0, 0, 0);
   }
   _moveCrosshair(pointer) {
     this._crosshairPos.x = pointer.x;
